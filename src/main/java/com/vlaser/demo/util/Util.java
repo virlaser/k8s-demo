@@ -1,4 +1,4 @@
-package util;
+package com.vlaser.demo.util;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
