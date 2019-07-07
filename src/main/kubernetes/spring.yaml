@@ -9,7 +9,7 @@ spec:
   type: NodePort
   ports:
     - port: 8080
-      nodePort: 30002
+      nodePort: 30013
   selector:
     app: spring-pod
 
@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
         - name: springdemo
-          image: vlaser/springdemo
+          image: vlaser/springdemo:v2
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
