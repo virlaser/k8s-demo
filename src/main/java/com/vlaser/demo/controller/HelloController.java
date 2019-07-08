@@ -30,6 +30,6 @@ public class HelloController {
         info.setTime(new Date());
         infoService.add(info);
         stringRedisTemplate.opsForValue().set(Util.dateFormat(info.getTime()), info.getIp());
-        return "Hello Spring Boot 2.0!" + "    Time: " + Util.dateFormat(info.getTime()) + "    IP: " + info.getIp();
+        return "Hello Spring Boot 2.0! version 3" + "    Time: " + Util.dateFormat(info.getTime()) + "    IP: " + info.getIp();
     }
 }
