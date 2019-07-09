@@ -1,43 +1,65 @@
 apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+
+apiVersion: v1
 kind: Service
 metadata:
   name: mysql-svc
   labels:
-    name: mysql-svc
+    app: mysql-svc
 spec:
-  type: NodePort
   ports:
     - port: 3306
       protocol: TCP
       targetPort: 3306
       name: http
-      nodePort: 32306
+  clusterIP: None
   selector:
-    name: mysql-pod
+    app: mysql-pod
 
 ---
 
-apiVersion: v1
-kind: ReplicationController
+apiVersion: apps/v1
+kind: StatefulSet
 metadata:
-  name: mysql-rc
+  name: mysql-ss
   labels:
-    name: mysql-rc
+    name: mysql-ss
 spec:
-  replicas: 1
   selector:
-    name: mysql-pod
+    matchLabels:
+      app: mysql
+  serviceName: mysql-svc
+  replicas: 1
   template:
     metadata:
       labels:
-        name: mysql-pod
+        app: mysql
     spec:
+      terminationGracePeriodSeconds: 10
       containers:
         - name: mysql
           image: mysql
-          imagePullPolicy: IfNotPresent
-          ports:
-            - containerPort: 3306
           env:
             - name: MYSQL_ROOT_PASSWORD
               value: "mysql"
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:
+            - name: mysql-volumes
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-volumes
+          persistentVolumeClaim:
+            claimName: mysql-pvc

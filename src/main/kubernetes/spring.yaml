@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
         - name: springdemo
-          image: vlaser/springdemo:v2
+          image: vlaser/springdemo:v4
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
