@@ -14,12 +14,13 @@
 * 应用上传docker hub: docker push [taggedName]
 
 而后通过在master中运行部署文件对镜像部署
+
 * kubectl create -f [fileName]
 
 ## 运行实例
 
 ```bash
-[vlaser@localhost ~]$ clear
+# 获取pod
 [vlaser@localhost ~]$ kubectl get pods -o wide
 NAME                                 READY   STATUS    RESTARTS   AGE     IP            NODE               NOMINATED NODE   READINESS GATES
 mysql-ss-0                           1/1     Running   0          23h     10.244.2.12   node2.vlaser.com   <none>           <none>
@@ -27,6 +28,7 @@ redis-rc-9q8jv                       1/1     Running   0          2d19h   10.244
 spring-deployment-674c8d6b75-5hdsw   1/1     Running   2          24h     10.244.2.11   node2.vlaser.com   <none>           <none>
 spring-deployment-674c8d6b75-jw87t   1/1     Running   2          24h     10.244.1.16   node1.vlaser.com   <none>           <none>
 spring-deployment-674c8d6b75-tpggb   1/1     Running   2          24h     10.244.1.15   node1.vlaser.com   <none>           <none>
+# 获取服务
 [vlaser@localhost ~]$ kubectl get svc -o wide
 NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE     SELECTOR
 kubernetes   ClusterIP   10.96.0.1        <none>        443/TCP          3d15h   <none>
@@ -34,18 +36,26 @@ mysql        ClusterIP   10.101.183.137   <none>        3306/TCP         39h    
 mysql-ss-0   NodePort    10.97.175.51     <none>        3306:30075/TCP   24h     zkInst=0
 redis-svc    NodePort    10.105.226.148   <none>        6379:30003/TCP   2d19h   app=redis-pod
 spring-svc   NodePort    10.99.246.26     <none>        8080:30013/TCP   24h     app=spring-pod
+# 获取deployment
 [vlaser@localhost ~]$ kubectl get deployment -o wide
 NAME                READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                 SELECTOR
 spring-deployment   3/3     3            3           24h   springdemo   vlaser/springdemo:v4   app=spring-pod
+# 获取持久卷
 [vlaser@localhost ~]$ kubectl get pv -o wide
 NAME      CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM               STORAGECLASS   REASON   AGE   VOLUMEMODE
 pv-demo   1Gi        RWO            Recycle          Bound    default/mysql-pvc                           41h   Filesystem
+# 获取持久卷声明
 [vlaser@localhost ~]$ kubectl get pvc -o wide
 NAME        STATUS   VOLUME    CAPACITY   ACCESS MODES   STORAGECLASS   AGE   VOLUMEMODE
 mysql-pvc   Bound    pv-demo   1Gi        RWO                           41h   Filesystem
+# 获取statefulset
 [vlaser@localhost ~]$ kubectl get statefulset -o wide
 NAME       READY   AGE   CONTAINERS   IMAGES
 mysql-ss   1/1     40h   mysql        mysql
+# 获取replicationController
+[vlaser@localhost ~]$ kubectl get rc -o wide
+NAME       DESIRED   CURRENT   READY   AGE     CONTAINERS   IMAGES   SELECTOR
+redis-rc   1         1         1       2d19h   redis        redis    app=redis-pod
 ```
 
 
